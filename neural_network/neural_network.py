@@ -56,11 +56,11 @@ class NeuralNetwork:
         # sum of δC/δb of corresponding layer 
         sum_dC_db = []
         for i, layer in enumerate(self.layers):
-            sum_dC_db.append(np.zeros((layer.num_neuron, 1)))
+            sum_dC_db.append(np.zeros((layer.num_neuron,)))
             if i != 0:
                 sum_dC_dw.append(np.zeros((layer.num_neuron, layer.previous_layer.output.shape[0])))
             else:
-                sum_dC_dw.append(np.zeros((layer.num_neuron, 1)))
+                sum_dC_dw.append(np.zeros((layer.num_neuron,)))
         for x, y in mini_batch:
             print(x, y)
             # feed forward in every layer
@@ -71,6 +71,7 @@ class NeuralNetwork:
             
             # error of output
             self.layers[-1].output_error(y)
+            print(self.layers[-1].error)
 
             # backpropagation from last layer to first hidden layer
             for i in range(len(self.layers)-2, 1, -1):
@@ -87,6 +88,5 @@ class NeuralNetwork:
             if i == 0:
                 layer.read_input(x)
             layer.feed_forward()
-        print(self.layers[-1].output.shape)
         print(self.layers[-1].output)
         return layer.output
